@@ -12,17 +12,19 @@ let transaction
 let yourBalance = 0;
 let incomes = 0;
 let expenses = 0;
-
+let clicked = 0;
 
 // When button is clicked do these things 
 btn.addEventListener('click', function (e) {
     e.preventDefault();
-    
+    if(inputAmount.value === '' && inputText.value === '') return;
 
     transaction = inputAmount.value.slice(0, 1);
+
     newTransaction();
     updateDisplay();
-    deleteTransaction();
+    clicked++;
+    container.addEventListener('click', deleteTransaction)
     inputAmount.value = inputText.value = '';
     
 })
@@ -31,7 +33,7 @@ const newTransaction = function () {
     // Get transaction text from input  
     // Get transaction amount from input 
     // Update History of transactions 
-    list.innerHTML += `<li class="${transaction === '-' ? 'minus' : 'plus'}">
+    list.innerHTML += `<li data-set="${clicked}" class="${transaction === '-' ? 'minus' : 'plus'}">
          ${inputText.value} <span>${transaction === '-' ? '-' : ''}$${transaction === '-' ? inputAmount.value.slice(1) : inputAmount.value}</span><button class="delete-btn">x</button>
        </li>`
 
@@ -52,15 +54,16 @@ const updateDisplay = function () {
     balance.textContent = '$' + yourBalance.toFixed(2)
 }
 
-const deleteTransaction = function () {
-    container.addEventListener('click', function(e) {
-        const clickedBtn = e.target.closest('.delete-btn');
-        clickedBtn.closest('li').remove();
-    }
-    )};
-
-
-
+// Remove clicked transaction
+const deleteTransaction = function (e) {
+    if(!e.target.classList.contains('delete-btn')) return;
+    
+    const btn = e.target;
+    btn.closest('li').remove();
+    
+    };
+   
+// Storing inforrmations into Local storage;
 
 
 
